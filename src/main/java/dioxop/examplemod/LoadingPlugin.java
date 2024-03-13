@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package dioxop.examplemod;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;

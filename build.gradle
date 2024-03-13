@@ -17,9 +17,9 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+version = project.mod_version
+group = project.mod_group // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = project.archives_base_name
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -47,24 +47,33 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            jvmArg "-Dfml.coreMods.load=com.example.examplemod.LoadingPlugin"
+            jvmArg "-Dfml.coreMods.load=dioxop.examplemod.LoadingPlugin"
         }
 
         server {
-
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            jvmArg "-Dfml.coreMods.load=com.example.examplemod.LoadingPlugin"
+            jvmArg "-Dfml.coreMods.load=dioxop.examplemod.LoadingPlugin"
         }
     }
 }
 
 repositories {
     maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
@@ -73,23 +82,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    // at runtime, use the full JEI jar
+    implementation('mezz.jei:jei_1.12.2:4.9.1.187')
 
     compile "org.spongepowered:mixin:0.8.2"
 }
@@ -140,3 +134,22 @@ publishing {
         }
     }
 }
+
+// Added to make mcmod.info work
+apply plugin: 'idea'
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+subprojects {
+    apply plugin: 'idea'
+}
+
+task prepareAssets(type: Copy) {
+    group = 'build'
+    from project.file('src/main/resources')
+    into project.file('build/classes/java/main')
+}
+
+classes.dependsOn(prepareAssets)

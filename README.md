@@ -16,11 +16,11 @@ apply plugin: 'org.spongepowered.mixin'
 minecraft {
     runs {
         client {
-            jvmArg "-Dfml.coreMods.load=com.example.examplemod.LoadingPlugin"
+            jvmArg "-Dfml.coreMods.load=dioxop.examplemod.LoadingPlugin"
         }
 
         server {
-            jvmArg "-Dfml.coreMods.load=com.example.examplemod.LoadingPlugin"
+            jvmArg "-Dfml.coreMods.load=dioxop.examplemod.LoadingPlugin"
         }
     }
 }
@@ -65,7 +65,7 @@ jar {
 }
 ```
 
-#### com.example.examplemod.LoadingPlugin
+#### dioxop.examplemod.LoadingPlugin
 ```java
 package com.example.examplemod;
 
@@ -112,7 +112,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 }
 ```
 
-#### com.example.examplemod.mixin.GuiMainMenuMixin
+#### mixin.com.github.dioxop.examplemod.GuiMainMenuMixin
 ```java
 package com.example.examplemod.mixin;
 

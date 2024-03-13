@@ -1,4 +1,4 @@
-package com.example.examplemod.mixin;
+package dioxop.examplemod.mixin;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import org.spongepowered.asm.mixin.Mixin;
